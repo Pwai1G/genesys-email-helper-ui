@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Genesys Cloud Email Helper</title>
+
+    <style>
+      :root {
+        --bg: #0b1220;
+        --panel: rgba(255, 255, 255, 0.08);
+        --panel2: rgba(255, 255, 255, 0.06);
+        --stroke: rgba(255, 255, 255, 0.12);
+        --text: rgba(255, 255, 255, 0.92);
+        --muted: rgba(255, 255, 255, 0.65);
+        --brand: #4ea6ff;
+        --ok: #2ecc71;
+        --warn: #f39c12;
+        --bad: #ff5c5c;
+        --radius: 18px;
+        --shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans Thai",
+          sans-serif;
+        background: radial-gradient(
+            1200px 600px at 10% 0%,
+            #14345a 0%,
+            transparent 60%
+          ),
+          radial-gradient(1200px 600px at 90% 30%, #2a145a 0%, transparent 55%),
+          linear-gradient(180deg, #070b14, #0b1220);
+        color: var(--text);
+      }
+
+      /* ===== Top Bar ===== */
+      .topbar {
+        background: #0b1220;
+        border-bottom: 1px solid var(--stroke);
+      }
+      .topbar-inner {
+        max-width: 1200px;
+        margin: auto;
+        padding: 14px 16px;
+        display: flex;
+        gap: 14px;
+        align-items: center;
+      }
+      .logo {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--brand), #8a5cff);
+        box-shadow: 0 10px 30px rgba(78, 166, 255, 0.2);
+        flex: 0 0 auto;
+      }
+      .brand {
+        min-width: 260px;
+      }
+      .brand h1 {
+        margin: 0;
+        font-size: 15px;
+        font-weight: 900;
+      }
+      .brand p {
+        margin: 0;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .pill {
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid var(--stroke);
+        font-size: 12px;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+
+      /* ===== Layout ===== */
+      .wrap {
+        max-width: 1200px;
+        margin: auto;
+        padding: 20px 16px 40px;
+      }
+
+      /* ===== Filters ===== */
+      .filters {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr 0.8fr 0.8fr;
+        gap: 10px;
+        padding: 14px;
+        background: var(--panel);
+        border: 1px solid var(--stroke);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+      }
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      label {
+        font-size: 12px;
+        color: var(--muted);
+        font-weight: 800;
+      }
+      input,
+      select {
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--text);
+        outline: none;
+      }
+      select option {
+        background: #0b1220;
+      }
+
+      /* ===== Tabs ===== */
+      .tabs {
+        margin-top: 12px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .tab {
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--muted);
+        padding: 9px 12px;
+        border-radius: 999px;
+        font-weight: 900;
+        font-size: 12px;
+        cursor: pointer;
+        transition: 0.15s;
+      }
+      .tab.active {
+        background: rgba(78, 166, 255, 0.18);
+        border-color: rgba(78, 166, 255, 0.35);
+        color: var(--text);
+      }
+
+      /* ===== Summary Bar ===== */
+      .summarybar {
+        margin-top: 14px;
+        padding: 12px 14px;
+        background: var(--panel2);
+        border: 1px solid var(--stroke);
+        border-radius: var(--radius);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+      }
+      .summary-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .summary-left .hint {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      /* ===== Buttons ===== */
+      .btn {
+        padding: 8px 14px;
+        border-radius: 12px;
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.06);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 900;
+        cursor: pointer;
+        transition: 0.15s;
+      }
+      .btn:hover {
+        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.09);
+      }
+      .btn.primary {
+        background: rgba(78, 166, 255, 0.18);
+        border-color: rgba(78, 166, 255, 0.5);
+      }
+      .btn.ok {
+        background: rgba(46, 204, 113, 0.18);
+        border-color: rgba(46, 204, 113, 0.5);
+      }
+      .btn.warn {
+        background: rgba(243, 156, 18, 0.18);
+        border-color: rgba(243, 156, 18, 0.55);
+      }
+      .btn:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      /* ===== Table ===== */
+      .table-wrap {
+        margin-top: 14px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--stroke);
+        border-radius: var(--radius);
+        overflow: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 980px;
+        table-layout: fixed;
+      }
+
+      /* ✅ Header อยู่หัวจริง (ไม่ sticky) */
+      thead th {
+        background: #0b1220;
+        padding: 12px;
+        font-size: 12px;
+        text-align: left;
+        color: rgba(255, 255, 255, 0.85);
+        border-bottom: 1px solid var(--stroke);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      tbody td {
+        padding: 12px;
+        font-size: 13px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        vertical-align: middle;
+      }
+
+      tbody tr:hover {
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      a {
+        color: #6cb6ff;
+        font-weight: 900;
+        text-decoration: none;
+      }
+
+      /* ===== Badges ===== */
+      .badge-imp {
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 900;
+        border: 1px solid var(--stroke);
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .imp-high {
+        background: rgba(255, 92, 92, 0.18);
+        border-color: rgba(255, 92, 92, 0.4);
+        color: #ffb3b3;
+      }
+      .imp-medium {
+        background: rgba(243, 156, 18, 0.18);
+        border-color: rgba(243, 156, 18, 0.45);
+        color: #ffd699;
+      }
+      .imp-low {
+        background: rgba(46, 204, 113, 0.18);
+        border-color: rgba(46, 204, 113, 0.45);
+        color: #baf2cf;
+      }
+      .imp-unknown {
+        background: rgba(255, 255, 255, 0.08);
+        color: rgba(255, 255, 255, 0.75);
+      }
+
+      .badge-type {
+        font-size: 11px;
+        color: var(--muted);
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.06);
+        padding: 6px 10px;
+        border-radius: 999px;
+        display: inline-block;
+        white-space: nowrap;
+      }
+
+      .row-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      /* ===== Drawer ===== */
+      .drawer {
+        position: fixed;
+        inset: 0;
+        display: none;
+        z-index: 100;
+      }
+      .drawer.open {
+        display: block;
+      }
+      .backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+      }
+      .panel {
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 100%;
+        width: min(620px, 95vw);
+        background: #0b1220;
+        border-left: 1px solid var(--stroke);
+        box-shadow: var(--shadow);
+        display: flex;
+        flex-direction: column;
+      }
+      .panel-head {
+        padding: 14px;
+        border-bottom: 1px solid var(--stroke);
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .panel-head h3 {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 900;
+        line-height: 1.35;
+      }
+      .panel-head p {
+        margin: 6px 0 0;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .panel-body {
+        padding: 14px;
+        overflow: auto;
+      }
+      .emailbox {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--stroke);
+        border-radius: 14px;
+        padding: 14px;
+        white-space: pre-wrap;
+        font-family: "Cordia New", "CordiaUPC", "Noto Sans Thai", sans-serif;
+        font-size: 14pt;
+        line-height: 1.55;
+      }
+      .panel-actions {
+        padding: 14px;
+        border-top: 1px solid var(--stroke);
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      /* ===== Toast ===== */
+      .toast {
+        position: fixed;
+        bottom: 18px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.78);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        padding: 10px 14px;
+        border-radius: 999px;
+        font-size: 12px;
+        display: none;
+        z-index: 999;
+      }
+      .toast.show {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      @media (max-width: 980px) {
+        .filters {
+          grid-template-columns: 1fr 1fr;
+        }
+        .brand {
+          min-width: unset;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- ===== Topbar ===== -->
+    <div class="topbar">
+      <div class="topbar-inner">
+        <div class="logo"></div>
+        <div class="brand">
+          <h1>Genesys Cloud Email Helper</h1>
+          <p>
+            Announcements → วิเคราะห์ Impact → สร้างอีเมลไทย + เตือนล่วงหน้า
+          </p>
+        </div>
+        <div class="pill" id="serverStatus">⏳ Connecting…</div>
+        <div class="pill">API: <span id="apiLabel">localhost:3000</span></div>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <!-- Filters -->
+      <div class="filters">
+        <div class="field">
+          <label>🔎 ค้นหา (Details / Type)</label>
+          <input id="q" type="text" placeholder="พิมพ์เพื่อค้นหา..." />
+        </div>
+
+        <div class="field">
+          <label>🧠 เลือก AI</label>
+          <select id="modelSelect">
+            <option value="gemini-2.5-flash-lite">Gemini 2.5 Flash Lite</option>
+            <option value="gemini-2.5-flash">Gemini 2.5 Flash</option>
+            <option value="gemma-3-27b-it" selected>
+              Gemma 3 27B (แนะนำ 🔥)
+            </option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>📅 ปี (Announced)</label>
+          <select id="yearFilter">
+            <option value="" disabled selected>-- เลือกปี --</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>🗓️ เดือน</label>
+          <select id="monthFilter">
+            <option value="">ทั้งหมด</option>
+            <option value="01">มกราคม</option>
+            <option value="02">กุมภาพันธ์</option>
+            <option value="03">มีนาคม</option>
+            <option value="04">เมษายน</option>
+            <option value="05">พฤษภาคม</option>
+            <option value="06">มิถุนายน</option>
+            <option value="07">กรกฎาคม</option>
+            <option value="08">สิงหาคม</option>
+            <option value="09">กันยายน</option>
+            <option value="10">ตุลาคม</option>
+            <option value="11">พฤศจิกายน</option>
+            <option value="12">ธันวาคม</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab active" data-tab="all">ทั้งหมด</button>
+        <button class="tab" data-tab="thisYear">Effective ปีนี้</button>
+        <button class="tab" data-tab="nextYear">Effective ปีหน้า</button>
+      </div>
+
+      <!-- Summary -->
+      <div class="summarybar">
+        <div class="summary-left">
+          <div>
+            ผลลัพธ์: <b id="totalCount">0</b> รายการ
+            <span class="hint" id="hint"
+              >· เลือก “ปี” ก่อนเพื่อเริ่มแสดงข้อมูล</span
+            >
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn" id="clearBtn">ล้างตัวกรอง</button>
+          <button class="btn primary" id="reloadBtn">รีโหลดประกาศ</button>
+          <button class="btn ok" id="aiAllBtn">
+            🧠 AI วิเคราะห์ (WAITING)
+          </button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 42%" data-sort="details">Details ⇅</th>
+              <th style="width: 14%">Importance</th>
+              <th style="width: 10%" data-sort="type">Type ⇅</th>
+              <th style="width: 12%" data-sort="announcedDate">Announced ⇅</th>
+              <th style="width: 12%" data-sort="effectiveDate">Effective ⇅</th>
+              <th style="width: 10%">Action</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr>
+              <td
+                colspan="6"
+                style="padding: 24px; color: rgba(255, 255, 255, 0.7)"
+              >
+                เลือก “ปี” เพื่อแสดงรายการ
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Drawer -->
+    <div class="drawer" id="drawer">
+      <div class="backdrop" id="drawerClose"></div>
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <h3 id="drawerTitle">รายละเอียด</h3>
+            <p id="drawerMeta">—</p>
+          </div>
+          <button class="btn" id="drawerX">ปิด</button>
+        </div>
+
+        <div class="panel-body">
+          <div class="emailbox" id="drawerContent">⏳ กำลังโหลด...</div>
+        </div>
+
+        <div class="panel-actions">
+          <button class="btn ok" id="copyBtn">📋 Copy</button>
+          <button class="btn primary" id="mailBtn">✉️ Send Email</button>
+          <button class="btn warn" id="ics7Btn">📅 เตือน 1 Week</button>
+          <button class="btn warn" id="ics30Btn">🗓️ เตือน 1 Month</button>
+          <button class="btn" id="refreshBtn">🔄 สร้างใหม่</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast">✅ Done</div>
+
+    <script>
+      // ===========================
+      // CONFIG
+      // ===========================
+      const API_BASE = "https://genesys-email-helper-backend.onrender.com";
+      document.getElementById("apiLabel").innerText = API_BASE.replace(
+        "http://",
+        ""
+      );
+
+      // ===========================
+      // STATE
+      // ===========================
+      let allAnnouncements = [];
+      let filtered = [];
+      let activeTab = "all";
+      let sortConfig = { key: null, direction: "asc" };
+      let currentItem = null;
+
+      // ===========================
+      // UI Helpers
+      // ===========================
+      const toast = (msg) => {
+        const el = document.getElementById("toast");
+        el.textContent = msg;
+        el.classList.add("show");
+        setTimeout(() => el.classList.remove("show"), 1800);
+      };
+
+      const escapeHtml = (str) =>
+        (str ?? "")
+          .toString()
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+
+      function guessImportance(details, type) {
+        const text = (details + " " + type).toLowerCase();
+        if (
+          text.includes("deprecation") ||
+          text.includes("removal") ||
+          text.includes("pricing") ||
+          text.includes("billing") ||
+          text.includes("security")
+        )
+          return "HIGH";
+        if (
+          text.includes("feature") ||
+          text.includes("new") ||
+          text.includes("improvement")
+        )
+          return "MEDIUM";
+        return "UNKNOWN";
+      }
+
+      function getImportanceBadge(level) {
+        const L = (level || "UNKNOWN").toUpperCase();
+        if (L === "HIGH")
+          return `<span class="badge-imp imp-high">🔴 HIGH</span>`;
+        if (L === "MEDIUM")
+          return `<span class="badge-imp imp-medium">🟠 MEDIUM</span>`;
+        if (L === "LOW") return `<span class="badge-imp imp-low">🟢 LOW</span>`;
+        return `<span class="badge-imp imp-unknown">⚪ WAITING</span>`;
+      }
+
+      function setDrawer(open) {
+        document.getElementById("drawer").classList.toggle("open", open);
+      }
+
+      // ===========================
+      // Fetch announcements
+      // ===========================
+      async function fetchAnnouncements() {
+        const status = document.getElementById("serverStatus");
+        status.textContent = "⏳ Connecting…";
+        try {
+          const res = await fetch(`${API_BASE}/api/announcements`);
+          const data = await res.json();
+          allAnnouncements = data || [];
+          status.textContent = `✅ Connected · ${allAnnouncements.length} announcements`;
+          populateYearOptions(allAnnouncements);
+          restoreSelection();
+          applyFilters();
+        } catch (e) {
+          status.textContent = `❌ Server Error: ${e.message}`;
+          document.getElementById(
+            "tableBody"
+          ).innerHTML = `<tr><td colspan="6" style="padding:24px;color:rgba(255,255,255,.75)">เชื่อมต่อไม่ได้: ${escapeHtml(
+            e.message
+          )}</td></tr>`;
+        }
+      }
+
+      function populateYearOptions(data) {
+        const yearSelect = document.getElementById("yearFilter");
+        const years = new Set();
+        data.forEach((item) => {
+          if (item.announcedDate?.length >= 4)
+            years.add(item.announcedDate.substring(0, 4));
+        });
+        yearSelect.innerHTML =
+          '<option value="" disabled selected>-- เลือกปี --</option>';
+        Array.from(years)
+          .sort()
+          .reverse()
+          .forEach((y) => {
+            const opt = document.createElement("option");
+            opt.value = y;
+            opt.innerText = y;
+            yearSelect.appendChild(opt);
+          });
+      }
+
+      function restoreSelection() {
+        const savedYear = localStorage.getItem("savedYear");
+        const savedMonth = localStorage.getItem("savedMonth");
+        const savedTab = localStorage.getItem("savedTab");
+        const savedQ = localStorage.getItem("savedQ");
+
+        if (savedTab) setTab(savedTab, false);
+        if (savedQ) document.getElementById("q").value = savedQ;
+
+        const yearSelect = document.getElementById("yearFilter");
+        if (
+          savedYear &&
+          Array.from(yearSelect.options).some((o) => o.value === savedYear)
+        ) {
+          yearSelect.value = savedYear;
+          if (savedMonth)
+            document.getElementById("monthFilter").value = savedMonth;
+        }
+      }
+
+      // ===========================
+      // Filtering / Sorting
+      // ===========================
+      function applyFilters() {
+        const year = document.getElementById("yearFilter").value;
+        const month = document.getElementById("monthFilter").value;
+        const q = document.getElementById("q").value.trim().toLowerCase();
+
+        localStorage.setItem("savedYear", year || "");
+        localStorage.setItem("savedMonth", month || "");
+        localStorage.setItem("savedTab", activeTab);
+        localStorage.setItem("savedQ", q);
+
+        if (!year) {
+          document.getElementById("totalCount").innerText = "0";
+          document.getElementById("hint").innerText =
+            "· เลือก “ปี” ก่อนเพื่อเริ่มแสดงข้อมูล";
+          document.getElementById("tableBody").innerHTML = `
+            <tr>
+              <td colspan="6" style="padding:24px;color:rgba(255,255,255,.7)">
+                เลือก “ปี” เพื่อแสดงรายการ
+              </td>
+            </tr>`;
+          return;
+        }
+
+        const currentYear = new Date().getFullYear();
+        const nextYear = currentYear + 1;
+
+        filtered = allAnnouncements.filter((item) => {
+          if (!item.announcedDate) return false;
+
+          const parts = item.announcedDate.split("-");
+          const matchAnnounced =
+            parts[0] === year && (month === "" || parts[1] === month);
+
+          let matchTab = true;
+          const eff = item.effectiveDate || "";
+          if (activeTab === "thisYear")
+            matchTab = eff.includes(currentYear.toString());
+          if (activeTab === "nextYear")
+            matchTab = eff.includes(nextYear.toString());
+
+          const matchQ =
+            !q ||
+            (item.details || "").toLowerCase().includes(q) ||
+            (item.type || "").toLowerCase().includes(q);
+
+          return matchAnnounced && matchTab && matchQ;
+        });
+
+        if (sortConfig.key) doSort(sortConfig.key, false);
+
+        renderTable(filtered);
+      }
+
+      function doSort(key, toggle = true) {
+        if (toggle) {
+          if (sortConfig.key === key) {
+            sortConfig.direction =
+              sortConfig.direction === "asc" ? "desc" : "asc";
+          } else {
+            sortConfig.key = key;
+            sortConfig.direction = "asc";
+          }
+        } else {
+          sortConfig.key = key;
+        }
+
+        const dir = sortConfig.direction === "asc" ? 1 : -1;
+        filtered.sort((a, b) => {
+          const A = (a[key] || "").toString();
+          const B = (b[key] || "").toString();
+          return A.localeCompare(B) * dir;
+        });
+      }
+
+      function renderTable(data) {
+        document.getElementById("totalCount").innerText = data.length;
+        document.getElementById("hint").innerText = data.length
+          ? "· คลิก “สร้าง/ดูอีเมล” เพื่อเปิดด้านขวา"
+          : "· ไม่พบข้อมูล";
+
+        const body = document.getElementById("tableBody");
+        if (!data.length) {
+          body.innerHTML = `<tr><td colspan="6" style="padding:24px;color:rgba(255,255,255,.7)">ไม่พบข้อมูล</td></tr>`;
+          return;
+        }
+
+        body.innerHTML = "";
+        data.forEach((item) => {
+          const impLevel =
+            item.cachedImportance || guessImportance(item.details, item.type);
+          const impBadge = getImportanceBadge(impLevel);
+
+          const btnText = item.hasSummary ? "ดูอีเมล" : "สร้างอีเมล";
+          const btnClass = item.hasSummary ? "ok" : "primary";
+
+          const safe = encodeURIComponent(JSON.stringify(item));
+
+          body.innerHTML += `
+            <tr>
+              <td title="${escapeHtml(item.details || "-")}">
+                <a href="${item.link || "#"}" target="_blank">${escapeHtml(
+            item.details || "-"
+          )}</a>
+              </td>
+              <td>${impBadge}</td>
+              <td><span class="badge-type">${escapeHtml(
+                item.type || "-"
+              )}</span></td>
+              <td title="${escapeHtml(item.announcedDate || "-")}">${escapeHtml(
+            item.announcedDate || "-"
+          )}</td>
+              <td title="${escapeHtml(item.effectiveDate || "-")}">${escapeHtml(
+            item.effectiveDate || "-"
+          )}</td>
+              <td>
+                <div class="row-actions">
+                  <button class="btn ${btnClass}" onclick='openDrawer(decodeItem("${safe}"), false)'>${btnText}</button>
+                  <button class="btn" onclick='openDrawer(decodeItem("${safe}"), true)'>🔄 สร้างใหม่</button>
+                </div>
+              </td>
+            </tr>
+          `;
+        });
+      }
+
+      function decodeItem(encoded) {
+        return JSON.parse(decodeURIComponent(encoded));
+      }
+
+      // ===========================
+      // Drawer + Summarize
+      // ===========================
+      function updateICSButtons(effDateStr) {
+        const hasValidDate =
+          effDateStr &&
+          effDateStr.trim() !== "-" &&
+          !isNaN(new Date(effDateStr));
+        document.getElementById("ics7Btn").disabled = !hasValidDate;
+        document.getElementById("ics30Btn").disabled = !hasValidDate;
+      }
+
+      async function openDrawer(item, forceRefresh = false) {
+        currentItem = item;
+
+        document.getElementById("drawerTitle").innerText =
+          item.details || "Details";
+        document.getElementById("drawerMeta").innerText = `Type: ${
+          item.type || "-"
+        } · Announced: ${item.announcedDate || "-"} · Effective: ${
+          item.effectiveDate || "-"
+        }`;
+
+        document.getElementById("drawerContent").innerText = forceRefresh
+          ? "⏳ AI กำลังวิเคราะห์ใหม่..."
+          : "⏳ AI กำลังอ่านและประเมิน...";
+
+        setDrawer(true);
+        updateICSButtons(item.effectiveDate);
+
+        const selectedModel = document.getElementById("modelSelect").value;
+
+        try {
+          const res = await fetch(`${API_BASE}/api/summarize`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              url: item.link,
+              forceRefresh,
+              selectedModel,
+            }),
+          });
+          const result = await res.json();
+
+          document.getElementById("drawerContent").innerText =
+            result.summary || "(ไม่มีข้อมูล)";
+
+          // update item in memory + rerender
+          if (result?.importance) {
+            item.cachedImportance = result.importance;
+            item.hasSummary = true;
+
+            const idx = allAnnouncements.findIndex((x) => x.link === item.link);
+            if (idx >= 0) {
+              allAnnouncements[idx].cachedImportance = result.importance;
+              allAnnouncements[idx].hasSummary = true;
+            }
+            renderTable(filtered);
+          }
+        } catch (e) {
+          document.getElementById("drawerContent").innerText =
+            "❌ Error: " + e.message;
+        }
+      }
+
+      async function copyCurrent() {
+        const text = document.getElementById("drawerContent").innerText;
+        try {
+          await navigator.clipboard.writeText(text);
+          toast("✅ Copied!");
+        } catch {
+          toast("❌ Copy failed");
+        }
+      }
+
+      function openOutlookFromDrawer() {
+        const text = document.getElementById("drawerContent").innerText;
+        let subject = "Genesys Cloud Update";
+        let body = text;
+
+        const subjectMatch = text.match(/Subject:\s*(.*)/i);
+        if (subjectMatch) {
+          subject = subjectMatch[1].trim();
+          body = text.replace(/Subject:.*\n*/i, "").trim();
+        }
+
+        window.location.href = `mailto:?subject=${encodeURIComponent(
+          subject
+        )}&body=${encodeURIComponent(body)}`;
+      }
+
+      function downloadICS(offsetDays) {
+        if (!currentItem) return;
+
+        const title = (currentItem.details || "Genesys Cloud Update").slice(
+          0,
+          120
+        );
+        const effDateStr = currentItem.effectiveDate;
+        const effDate = new Date(effDateStr);
+        if (isNaN(effDate)) return toast("❌ Effective date ไม่ถูกต้อง");
+
+        const eventDate = new Date(effDate);
+        eventDate.setDate(effDate.getDate() - offsetDays);
+
+        const year = eventDate.getFullYear();
+        const month = String(eventDate.getMonth() + 1).padStart(2, "0");
+        const day = String(eventDate.getDate()).padStart(2, "0");
+        const dateString = `${year}${month}${day}`;
+
+        let desc = (document.getElementById("drawerContent").innerText || "")
+          .replace(/Subject:.*\n*/i, "")
+          .trim();
+        desc = desc.substring(0, 600) + "...";
+
+        const url = currentItem.link || "";
+
+        const icsContent = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//GenesysCloudHelper//EN
+BEGIN:VEVENT
+UID:${Date.now()}@genesyshelper
+DTSTAMP:${dateString}T000000Z
+DTSTART;VALUE=DATE:${dateString}
+DTEND;VALUE=DATE:${dateString}
+SUMMARY:🔔 Reminder (${offsetDays}d before): ${title}
+DESCRIPTION:Effective Date: ${effDateStr}\\n\\n${desc.replace(
+          /\n/g,
+          "\\n"
+        )}\\n\\nLink: ${url}
+URL:${url}
+END:VEVENT
+END:VCALENDAR`;
+
+        const blob = new Blob([icsContent], { type: "text/calendar" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `reminder-${offsetDays}days-before.ics`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        toast("📅 ดาวน์โหลด .ics แล้ว");
+      }
+
+      // ===========================
+      // ✅ AI Analyze (WAITING) batch
+      // ===========================
+      document
+        .getElementById("aiAllBtn")
+        .addEventListener("click", () => aiAnalyzeWaiting(2));
+
+      async function aiAnalyzeWaiting(concurrency = 2) {
+        const selectedModel = document.getElementById("modelSelect").value;
+
+        // pick targets: need AI + has link + not PDF
+        const targets = filtered.filter((it) => {
+          const imp = (
+            it.cachedImportance ||
+            guessImportance(it.details, it.type) ||
+            "UNKNOWN"
+          ).toUpperCase();
+          const needAI =
+            !it.hasSummary || imp === "UNKNOWN" || imp === "WAITING";
+          const okLink = it.link && !it.link.toLowerCase().endsWith(".pdf");
+          return needAI && okLink;
+        });
+
+        if (!targets.length) return toast("ไม่มีรายการ WAITING ให้ทำแล้ว ✅");
+
+        toast(`เริ่มวิเคราะห์ ${targets.length} รายการ...`);
+
+        let done = 0;
+        let idx = 0;
+
+        async function worker() {
+          while (idx < targets.length) {
+            const item = targets[idx++];
+
+            try {
+              const res = await fetch(`${API_BASE}/api/summarize`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  url: item.link,
+                  forceRefresh: false,
+                  selectedModel,
+                }),
+              });
+
+              const result = await res.json();
+
+              if (result?.importance) {
+                item.cachedImportance = result.importance;
+                item.hasSummary = true;
+
+                const aidx = allAnnouncements.findIndex(
+                  (x) => x.link === item.link
+                );
+                if (aidx >= 0) {
+                  allAnnouncements[aidx].cachedImportance = result.importance;
+                  allAnnouncements[aidx].hasSummary = true;
+                }
+              }
+            } catch (_) {
+              // ignore per-item error
+            } finally {
+              done++;
+              document.getElementById(
+                "serverStatus"
+              ).textContent = `🧠 AI Progress: ${done}/${targets.length}`;
+              renderTable(filtered);
+            }
+          }
+        }
+
+        await Promise.all(Array.from({ length: concurrency }, worker));
+
+        document.getElementById(
+          "serverStatus"
+        ).textContent = `✅ Done · AI updated ${done}/${targets.length}`;
+        toast("เสร็จแล้ว ✅");
+      }
+
+      // ===========================
+      // Events
+      // ===========================
+      document
+        .getElementById("yearFilter")
+        .addEventListener("change", applyFilters);
+      document
+        .getElementById("monthFilter")
+        .addEventListener("change", applyFilters);
+      document.getElementById("q").addEventListener("input", () => {
+        clearTimeout(window.__qTimer);
+        window.__qTimer = setTimeout(applyFilters, 180);
+      });
+
+      document.querySelectorAll(".tab").forEach((btn) => {
+        btn.addEventListener("click", () => setTab(btn.dataset.tab, true));
+      });
+
+      function setTab(tab, persist = true) {
+        activeTab = tab;
+        document
+          .querySelectorAll(".tab")
+          .forEach((b) => b.classList.toggle("active", b.dataset.tab === tab));
+        if (persist) localStorage.setItem("savedTab", tab);
+        applyFilters();
+      }
+
+      // Sort
+      document.querySelectorAll("thead th[data-sort]").forEach((th) => {
+        th.addEventListener("click", () => {
+          const key = th.dataset.sort;
+          doSort(key, true);
+          renderTable(filtered);
+        });
+      });
+
+      document
+        .getElementById("reloadBtn")
+        .addEventListener("click", fetchAnnouncements);
+
+      document.getElementById("clearBtn").addEventListener("click", () => {
+        document.getElementById("q").value = "";
+        document.getElementById("monthFilter").value = "";
+        localStorage.removeItem("savedQ");
+        localStorage.removeItem("savedMonth");
+        applyFilters();
+      });
+
+      // Drawer close
+      document
+        .getElementById("drawerClose")
+        .addEventListener("click", () => setDrawer(false));
+      document
+        .getElementById("drawerX")
+        .addEventListener("click", () => setDrawer(false));
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") setDrawer(false);
+      });
+
+      // Drawer actions
+      document.getElementById("copyBtn").addEventListener("click", copyCurrent);
+      document
+        .getElementById("mailBtn")
+        .addEventListener("click", openOutlookFromDrawer);
+      document
+        .getElementById("ics7Btn")
+        .addEventListener("click", () => downloadICS(7));
+      document
+        .getElementById("ics30Btn")
+        .addEventListener("click", () => downloadICS(30));
+      document.getElementById("refreshBtn").addEventListener("click", () => {
+        if (currentItem) openDrawer(currentItem, true);
+      });
+
+      // Init
+      fetchAnnouncements();
+    </script>
+  </body>
+</html>
