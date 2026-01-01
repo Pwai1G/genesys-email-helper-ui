@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Genesys Cloud Email Helper</title>
-
     <style>
       :root {
         --bg: #0b1220;
@@ -20,15 +19,14 @@
         --radius: 18px;
         --shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
       }
-
       * {
         box-sizing: border-box;
       }
-
       body {
         margin: 0;
         font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans Thai",
           sans-serif;
+        color: var(--text);
         background: radial-gradient(
             1200px 600px at 10% 0%,
             #14345a 0%,
@@ -36,10 +34,7 @@
           ),
           radial-gradient(1200px 600px at 90% 30%, #2a145a 0%, transparent 55%),
           linear-gradient(180deg, #070b14, #0b1220);
-        color: var(--text);
       }
-
-      /* ===== Top Bar ===== */
       .topbar {
         background: #0b1220;
         border-bottom: 1px solid var(--stroke);
@@ -58,7 +53,6 @@
         border-radius: 12px;
         background: linear-gradient(135deg, var(--brand), #8a5cff);
         box-shadow: 0 10px 30px rgba(78, 166, 255, 0.2);
-        flex: 0 0 auto;
       }
       .brand {
         min-width: 260px;
@@ -82,15 +76,49 @@
         color: var(--muted);
         white-space: nowrap;
       }
-
-      /* ===== Layout ===== */
       .wrap {
         max-width: 1200px;
         margin: auto;
         padding: 20px 16px 40px;
       }
 
-      /* ===== Filters ===== */
+      .btn {
+        padding: 8px 14px;
+        border-radius: 12px;
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.06);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 900;
+        cursor: pointer;
+        transition: 0.15s;
+      }
+      .btn:hover {
+        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.09);
+      }
+      .btn.primary {
+        background: rgba(78, 166, 255, 0.18);
+        border-color: rgba(78, 166, 255, 0.5);
+      }
+      .btn.ok {
+        background: rgba(46, 204, 113, 0.18);
+        border-color: rgba(46, 204, 113, 0.5);
+      }
+      .btn.warn {
+        background: rgba(243, 156, 18, 0.18);
+        border-color: rgba(243, 156, 18, 0.55);
+      }
+      .btn.bad {
+        background: rgba(255, 92, 92, 0.18);
+        border-color: rgba(255, 92, 92, 0.55);
+      }
+      .btn:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+        transform: none;
+      }
+
       .filters {
         display: grid;
         grid-template-columns: 1.2fr 1fr 0.8fr 0.8fr;
@@ -124,7 +152,6 @@
         background: #0b1220;
       }
 
-      /* ===== Tabs ===== */
       .tabs {
         margin-top: 12px;
         display: flex;
@@ -140,7 +167,6 @@
         font-weight: 900;
         font-size: 12px;
         cursor: pointer;
-        transition: 0.15s;
       }
       .tab.active {
         background: rgba(78, 166, 255, 0.18);
@@ -148,7 +174,6 @@
         color: var(--text);
       }
 
-      /* ===== Summary Bar ===== */
       .summarybar {
         margin-top: 14px;
         padding: 12px 14px;
@@ -160,57 +185,12 @@
         align-items: center;
         gap: 12px;
       }
-      .summary-left {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        flex-wrap: wrap;
-      }
-      .summary-left .hint {
-        font-size: 12px;
-        color: var(--muted);
-      }
       .actions {
         display: flex;
         gap: 8px;
         flex-wrap: wrap;
       }
 
-      /* ===== Buttons ===== */
-      .btn {
-        padding: 8px 14px;
-        border-radius: 12px;
-        border: 1px solid var(--stroke);
-        background: rgba(255, 255, 255, 0.06);
-        color: #fff;
-        font-size: 12px;
-        font-weight: 900;
-        cursor: pointer;
-        transition: 0.15s;
-      }
-      .btn:hover {
-        transform: translateY(-1px);
-        background: rgba(255, 255, 255, 0.09);
-      }
-      .btn.primary {
-        background: rgba(78, 166, 255, 0.18);
-        border-color: rgba(78, 166, 255, 0.5);
-      }
-      .btn.ok {
-        background: rgba(46, 204, 113, 0.18);
-        border-color: rgba(46, 204, 113, 0.5);
-      }
-      .btn.warn {
-        background: rgba(243, 156, 18, 0.18);
-        border-color: rgba(243, 156, 18, 0.55);
-      }
-      .btn:disabled {
-        opacity: 0.55;
-        cursor: not-allowed;
-        transform: none;
-      }
-
-      /* ===== Table ===== */
       .table-wrap {
         margin-top: 14px;
         background: rgba(255, 255, 255, 0.04);
@@ -218,15 +198,12 @@
         border-radius: var(--radius);
         overflow: auto;
       }
-
       table {
         width: 100%;
         border-collapse: collapse;
         min-width: 980px;
         table-layout: fixed;
       }
-
-      /* ✅ Header อยู่หัวจริง (ไม่ sticky) */
       thead th {
         background: #0b1220;
         padding: 12px;
@@ -240,7 +217,6 @@
         cursor: pointer;
         user-select: none;
       }
-
       tbody td {
         padding: 12px;
         font-size: 13px;
@@ -250,18 +226,15 @@
         text-overflow: ellipsis;
         vertical-align: middle;
       }
-
       tbody tr:hover {
         background: rgba(255, 255, 255, 0.05);
       }
-
       a {
         color: #6cb6ff;
         font-weight: 900;
         text-decoration: none;
       }
 
-      /* ===== Badges ===== */
       .badge-imp {
         padding: 6px 10px;
         border-radius: 999px;
@@ -291,7 +264,6 @@
         background: rgba(255, 255, 255, 0.08);
         color: rgba(255, 255, 255, 0.75);
       }
-
       .badge-type {
         font-size: 11px;
         color: var(--muted);
@@ -302,7 +274,6 @@
         display: inline-block;
         white-space: nowrap;
       }
-
       .row-actions {
         display: flex;
         gap: 8px;
@@ -310,7 +281,6 @@
         justify-content: flex-end;
       }
 
-      /* ===== Drawer ===== */
       .drawer {
         position: fixed;
         inset: 0;
@@ -330,7 +300,7 @@
         right: 0;
         top: 0;
         height: 100%;
-        width: min(620px, 95vw);
+        width: min(700px, 96vw);
         background: #0b1220;
         border-left: 1px solid var(--stroke);
         box-shadow: var(--shadow);
@@ -378,7 +348,80 @@
         flex-wrap: wrap;
       }
 
-      /* ===== Toast ===== */
+      /* Login modal */
+      .modal {
+        position: fixed;
+        inset: 0;
+        display: none;
+        z-index: 200;
+      }
+      .modal.open {
+        display: block;
+      }
+      .modal .backdrop {
+        background: rgba(0, 0, 0, 0.7);
+      }
+      .modal-card {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: min(460px, 92vw);
+        background: #0b1220;
+        border: 1px solid var(--stroke);
+        border-radius: 18px;
+        box-shadow: var(--shadow);
+        padding: 16px;
+      }
+      .modal-card h2 {
+        margin: 0 0 6px 0;
+        font-size: 16px;
+      }
+      .modal-card p {
+        margin: 0 0 12px 0;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .grid2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .err {
+        color: #ffb3b3;
+        font-size: 12px;
+        margin-top: 8px;
+        display: none;
+      }
+
+      /* Admin users table */
+      .usersBox {
+        margin-top: 10px;
+        border: 1px solid var(--stroke);
+        border-radius: 14px;
+        overflow: hidden;
+      }
+      .usersBox table {
+        min-width: 0;
+      }
+      .usersBox thead th {
+        cursor: default;
+      }
+      .usersBox td,
+      .usersBox th {
+        padding: 10px;
+      }
+      .usersTop {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .small {
+        font-size: 12px;
+        color: var(--muted);
+      }
       .toast {
         position: fixed;
         bottom: 18px;
@@ -409,25 +452,24 @@
       }
     </style>
   </head>
-
   <body>
-    <!-- ===== Topbar ===== -->
     <div class="topbar">
       <div class="topbar-inner">
         <div class="logo"></div>
         <div class="brand">
           <h1>Genesys Cloud Email Helper</h1>
-          <p>
-            Announcements → วิเคราะห์ Impact → สร้างอีเมลไทย + เตือนล่วงหน้า
-          </p>
+          <p>Announcements → วิเคราะห์ Impact → สร้างอีเมลไทย (มี Login)</p>
         </div>
         <div class="pill" id="serverStatus">⏳ Connecting…</div>
-        <div class="pill">API: <span id="apiLabel">localhost:3000</span></div>
+        <div class="pill">API: <span id="apiLabel"></span></div>
+        <button class="btn" id="usersBtn" title="จัดการผู้ใช้">Users</button>
+        <button class="btn bad" id="logoutBtn" title="ออกจากระบบ">
+          Logout
+        </button>
       </div>
     </div>
 
     <div class="wrap">
-      <!-- Filters -->
       <div class="filters">
         <div class="field">
           <label>🔎 ค้นหา (Details / Type)</label>
@@ -472,22 +514,18 @@
         </div>
       </div>
 
-      <!-- Tabs -->
       <div class="tabs">
         <button class="tab active" data-tab="all">ทั้งหมด</button>
         <button class="tab" data-tab="thisYear">Effective ปีนี้</button>
         <button class="tab" data-tab="nextYear">Effective ปีหน้า</button>
       </div>
 
-      <!-- Summary -->
       <div class="summarybar">
-        <div class="summary-left">
-          <div>
-            ผลลัพธ์: <b id="totalCount">0</b> รายการ
-            <span class="hint" id="hint"
-              >· เลือก “ปี” ก่อนเพื่อเริ่มแสดงข้อมูล</span
-            >
-          </div>
+        <div>
+          ผลลัพธ์: <b id="totalCount">0</b> รายการ
+          <span class="small" id="hint"
+            >· เลือก “ปี” ก่อนเพื่อเริ่มแสดงข้อมูล</span
+          >
         </div>
         <div class="actions">
           <button class="btn" id="clearBtn">ล้างตัวกรอง</button>
@@ -498,7 +536,6 @@
         </div>
       </div>
 
-      <!-- Table -->
       <div class="table-wrap">
         <table>
           <thead>
@@ -517,7 +554,7 @@
                 colspan="6"
                 style="padding: 24px; color: rgba(255, 255, 255, 0.7)"
               >
-                เลือก “ปี” เพื่อแสดงรายการ
+                กำลังตรวจสอบสถานะ Login…
               </td>
             </tr>
           </tbody>
@@ -525,7 +562,7 @@
       </div>
     </div>
 
-    <!-- Drawer -->
+    <!-- Drawer: Email -->
     <div class="drawer" id="drawer">
       <div class="backdrop" id="drawerClose"></div>
       <div class="panel">
@@ -536,11 +573,9 @@
           </div>
           <button class="btn" id="drawerX">ปิด</button>
         </div>
-
         <div class="panel-body">
           <div class="emailbox" id="drawerContent">⏳ กำลังโหลด...</div>
         </div>
-
         <div class="panel-actions">
           <button class="btn ok" id="copyBtn">📋 Copy</button>
           <button class="btn primary" id="mailBtn">✉️ Send Email</button>
@@ -551,30 +586,130 @@
       </div>
     </div>
 
+    <!-- Modal: Login -->
+    <div class="modal" id="loginModal">
+      <div class="backdrop"></div>
+      <div class="modal-card">
+        <h2>🔐 Login</h2>
+        <p>
+          กรอก user/password ที่อยู่ใน users.json (ระบบจะจำ session ด้วย cookie)
+        </p>
+        <div class="grid2">
+          <div class="field">
+            <label>Username</label>
+            <input id="loginUser" autocomplete="username" />
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input
+              id="loginPass"
+              type="password"
+              autocomplete="current-password"
+            />
+          </div>
+        </div>
+        <div
+          style="
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 12px;
+          "
+        >
+          <button class="btn primary" id="loginBtn">Login</button>
+        </div>
+        <div class="err" id="loginErr">Login failed</div>
+        <p class="small" style="margin-top: 10px">
+          ถ้าเพิ่ง deploy ครั้งแรก ใช้ bootstrap:
+          <b>BOOTSTRAP_USER/BOOTSTRAP_PASS</b> ที่ตั้งไว้ใน Render
+        </p>
+      </div>
+    </div>
+
+    <!-- Modal: Users Admin -->
+    <div class="modal" id="usersModal">
+      <div class="backdrop" id="usersClose"></div>
+      <div class="modal-card" style="width: min(760px, 96vw)">
+        <div class="usersTop">
+          <div>
+            <h2 style="margin: 0">👥 Manage Users</h2>
+            <div class="small">ต้องมี <b>Admin Key</b> เพื่อเพิ่ม/ลบ user</div>
+          </div>
+          <button class="btn" id="usersX">ปิด</button>
+        </div>
+
+        <div class="field" style="margin-top: 10px">
+          <label>Admin Key (เก็บแค่ใน sessionStorage)</label>
+          <input
+            id="adminKeyInput"
+            placeholder="ใส่ ADMIN_KEY ที่ตั้งใน Render"
+          />
+        </div>
+
+        <div class="grid2" style="margin-top: 10px">
+          <div class="field">
+            <label>New Username</label>
+            <input id="newUser" />
+          </div>
+          <div class="field">
+            <label>New Password (>=6)</label>
+            <input id="newPass" type="password" />
+          </div>
+        </div>
+
+        <div
+          style="
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 10px;
+          "
+        >
+          <button class="btn ok" id="addUserBtn">➕ Add User</button>
+          <button class="btn primary" id="reloadUsersBtn">🔄 Reload</button>
+        </div>
+
+        <div class="usersBox" style="margin-top: 10px">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 55%">Username</th>
+                <th style="width: 30%">Created</th>
+                <th style="width: 15%">Action</th>
+              </tr>
+            </thead>
+            <tbody id="usersBody">
+              <tr>
+                <td colspan="3" style="color: rgba(255, 255, 255, 0.7)">
+                  โหลดรายชื่อ…
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="err" id="usersErr" style="display: none">Error</div>
+      </div>
+    </div>
+
     <div class="toast" id="toast">✅ Done</div>
 
     <script>
-      // ===========================
-      // CONFIG
-      // ===========================
-      const API_BASE = "https://genesys-email-helper-backend.onrender.com";
+      // ===== CONFIG =====
+      const API_BASE = "https://genesys-email-helper-backend.onrender.com"; // <<< เปลี่ยนตรงนี้
       document.getElementById("apiLabel").innerText = API_BASE.replace(
-        "http://",
+        "https://",
         ""
       );
 
-      // ===========================
-      // STATE
-      // ===========================
+      // ===== State =====
       let allAnnouncements = [];
       let filtered = [];
       let activeTab = "all";
       let sortConfig = { key: null, direction: "asc" };
       let currentItem = null;
 
-      // ===========================
-      // UI Helpers
-      // ===========================
+      // ===== Helpers =====
       const toast = (msg) => {
         const el = document.getElementById("toast");
         el.textContent = msg;
@@ -610,7 +745,7 @@
         return "UNKNOWN";
       }
 
-      function getImportanceBadge(level) {
+      function badgeImp(level) {
         const L = (level || "UNKNOWN").toUpperCase();
         if (L === "HIGH")
           return `<span class="badge-imp imp-high">🔴 HIGH</span>`;
@@ -623,26 +758,98 @@
       function setDrawer(open) {
         document.getElementById("drawer").classList.toggle("open", open);
       }
+      function setModal(id, open) {
+        document.getElementById(id).classList.toggle("open", open);
+      }
 
-      // ===========================
-      // Fetch announcements
-      // ===========================
+      async function apiFetch(path, options = {}) {
+        // ต้อง include cookie
+        const res = await fetch(API_BASE + path, {
+          credentials: "include",
+          ...options,
+          headers: {
+            ...(options.headers || {}),
+          },
+        });
+        return res;
+      }
+
+      // ===== Auth =====
+      async function checkLogin() {
+        const status = document.getElementById("serverStatus");
+        status.textContent = "⏳ Checking login…";
+        try {
+          const res = await apiFetch("/auth/me");
+          const data = await res.json();
+          if (!data.loggedIn) {
+            status.textContent = "🔐 Please login";
+            setModal("loginModal", true);
+            return false;
+          }
+          status.textContent = `✅ Logged in: ${data.username}`;
+          return true;
+        } catch (e) {
+          status.textContent = "❌ Backend unreachable";
+          return false;
+        }
+      }
+
+      async function login() {
+        const u = document.getElementById("loginUser").value.trim();
+        const p = document.getElementById("loginPass").value;
+        const err = document.getElementById("loginErr");
+        err.style.display = "none";
+
+        try {
+          const res = await apiFetch("/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username: u, password: p }),
+          });
+          const data = await res.json();
+          if (!res.ok) {
+            err.textContent = data?.error || "Login failed";
+            err.style.display = "block";
+            return;
+          }
+          setModal("loginModal", false);
+          toast("✅ Logged in");
+          await fetchAnnouncements();
+        } catch (e) {
+          err.textContent = "Login error: " + e.message;
+          err.style.display = "block";
+        }
+      }
+
+      async function logout() {
+        await apiFetch("/auth/logout", { method: "POST" });
+        toast("Logged out");
+        location.reload();
+      }
+
+      // ===== Announcements =====
       async function fetchAnnouncements() {
         const status = document.getElementById("serverStatus");
-        status.textContent = "⏳ Connecting…";
+        status.textContent = "⏳ Loading announcements…";
+
         try {
-          const res = await fetch(`${API_BASE}/api/announcements`);
+          const res = await apiFetch("/api/announcements");
+          if (res.status === 401) {
+            setModal("loginModal", true);
+            status.textContent = "🔐 Please login";
+            return;
+          }
           const data = await res.json();
           allAnnouncements = data || [];
-          status.textContent = `✅ Connected · ${allAnnouncements.length} announcements`;
+          status.textContent = `✅ Loaded: ${allAnnouncements.length}`;
           populateYearOptions(allAnnouncements);
           restoreSelection();
           applyFilters();
         } catch (e) {
-          status.textContent = `❌ Server Error: ${e.message}`;
+          status.textContent = "❌ Error loading announcements";
           document.getElementById(
             "tableBody"
-          ).innerHTML = `<tr><td colspan="6" style="padding:24px;color:rgba(255,255,255,.75)">เชื่อมต่อไม่ได้: ${escapeHtml(
+          ).innerHTML = `<tr><td colspan="6" style="padding:24px;color:rgba(255,255,255,.75)">Error: ${escapeHtml(
             e.message
           )}</td></tr>`;
         }
@@ -688,9 +895,6 @@
         }
       }
 
-      // ===========================
-      // Filtering / Sorting
-      // ===========================
       function applyFilters() {
         const year = document.getElementById("yearFilter").value;
         const month = document.getElementById("monthFilter").value;
@@ -705,12 +909,9 @@
           document.getElementById("totalCount").innerText = "0";
           document.getElementById("hint").innerText =
             "· เลือก “ปี” ก่อนเพื่อเริ่มแสดงข้อมูล";
-          document.getElementById("tableBody").innerHTML = `
-            <tr>
-              <td colspan="6" style="padding:24px;color:rgba(255,255,255,.7)">
-                เลือก “ปี” เพื่อแสดงรายการ
-              </td>
-            </tr>`;
+          document.getElementById(
+            "tableBody"
+          ).innerHTML = `<tr><td colspan="6" style="padding:24px;color:rgba(255,255,255,.7)">เลือก “ปี” เพื่อแสดงรายการ</td></tr>`;
           return;
         }
 
@@ -719,7 +920,6 @@
 
         filtered = allAnnouncements.filter((item) => {
           if (!item.announcedDate) return false;
-
           const parts = item.announcedDate.split("-");
           const matchAnnounced =
             parts[0] === year && (month === "" || parts[1] === month);
@@ -735,34 +935,29 @@
             !q ||
             (item.details || "").toLowerCase().includes(q) ||
             (item.type || "").toLowerCase().includes(q);
-
           return matchAnnounced && matchTab && matchQ;
         });
 
         if (sortConfig.key) doSort(sortConfig.key, false);
-
         renderTable(filtered);
       }
 
       function doSort(key, toggle = true) {
         if (toggle) {
-          if (sortConfig.key === key) {
+          if (sortConfig.key === key)
             sortConfig.direction =
               sortConfig.direction === "asc" ? "desc" : "asc";
-          } else {
+          else {
             sortConfig.key = key;
             sortConfig.direction = "asc";
           }
-        } else {
-          sortConfig.key = key;
-        }
+        } else sortConfig.key = key;
 
         const dir = sortConfig.direction === "asc" ? 1 : -1;
-        filtered.sort((a, b) => {
-          const A = (a[key] || "").toString();
-          const B = (b[key] || "").toString();
-          return A.localeCompare(B) * dir;
-        });
+        filtered.sort(
+          (a, b) =>
+            ((a[key] || "") + "").localeCompare((b[key] || "") + "") * dir
+        );
       }
 
       function renderTable(data) {
@@ -781,38 +976,35 @@
         data.forEach((item) => {
           const impLevel =
             item.cachedImportance || guessImportance(item.details, item.type);
-          const impBadge = getImportanceBadge(impLevel);
-
           const btnText = item.hasSummary ? "ดูอีเมล" : "สร้างอีเมล";
           const btnClass = item.hasSummary ? "ok" : "primary";
-
           const safe = encodeURIComponent(JSON.stringify(item));
 
           body.innerHTML += `
-            <tr>
-              <td title="${escapeHtml(item.details || "-")}">
-                <a href="${item.link || "#"}" target="_blank">${escapeHtml(
+        <tr>
+          <td title="${escapeHtml(item.details || "-")}">
+            <a href="${item.link || "#"}" target="_blank">${escapeHtml(
             item.details || "-"
           )}</a>
-              </td>
-              <td>${impBadge}</td>
-              <td><span class="badge-type">${escapeHtml(
-                item.type || "-"
-              )}</span></td>
-              <td title="${escapeHtml(item.announcedDate || "-")}">${escapeHtml(
+          </td>
+          <td>${badgeImp(impLevel)}</td>
+          <td><span class="badge-type">${escapeHtml(
+            item.type || "-"
+          )}</span></td>
+          <td title="${escapeHtml(item.announcedDate || "-")}">${escapeHtml(
             item.announcedDate || "-"
           )}</td>
-              <td title="${escapeHtml(item.effectiveDate || "-")}">${escapeHtml(
+          <td title="${escapeHtml(item.effectiveDate || "-")}">${escapeHtml(
             item.effectiveDate || "-"
           )}</td>
-              <td>
-                <div class="row-actions">
-                  <button class="btn ${btnClass}" onclick='openDrawer(decodeItem("${safe}"), false)'>${btnText}</button>
-                  <button class="btn" onclick='openDrawer(decodeItem("${safe}"), true)'>🔄 สร้างใหม่</button>
-                </div>
-              </td>
-            </tr>
-          `;
+          <td>
+            <div class="row-actions">
+              <button class="btn ${btnClass}" onclick='openDrawer(decodeItem("${safe}"), false)'>${btnText}</button>
+              <button class="btn" onclick='openDrawer(decodeItem("${safe}"), true)'>🔄 สร้างใหม่</button>
+            </div>
+          </td>
+        </tr>
+      `;
         });
       }
 
@@ -820,21 +1012,15 @@
         return JSON.parse(decodeURIComponent(encoded));
       }
 
-      // ===========================
-      // Drawer + Summarize
-      // ===========================
-      function updateICSButtons(effDateStr) {
-        const hasValidDate =
-          effDateStr &&
-          effDateStr.trim() !== "-" &&
-          !isNaN(new Date(effDateStr));
-        document.getElementById("ics7Btn").disabled = !hasValidDate;
-        document.getElementById("ics30Btn").disabled = !hasValidDate;
+      // ===== Drawer: summarize =====
+      function updateICSButtons(eff) {
+        const ok = eff && eff.trim() !== "-" && !isNaN(new Date(eff));
+        document.getElementById("ics7Btn").disabled = !ok;
+        document.getElementById("ics30Btn").disabled = !ok;
       }
 
       async function openDrawer(item, forceRefresh = false) {
         currentItem = item;
-
         document.getElementById("drawerTitle").innerText =
           item.details || "Details";
         document.getElementById("drawerMeta").innerText = `Type: ${
@@ -842,18 +1028,15 @@
         } · Announced: ${item.announcedDate || "-"} · Effective: ${
           item.effectiveDate || "-"
         }`;
-
         document.getElementById("drawerContent").innerText = forceRefresh
           ? "⏳ AI กำลังวิเคราะห์ใหม่..."
           : "⏳ AI กำลังอ่านและประเมิน...";
-
         setDrawer(true);
         updateICSButtons(item.effectiveDate);
 
         const selectedModel = document.getElementById("modelSelect").value;
-
         try {
-          const res = await fetch(`${API_BASE}/api/summarize`, {
+          const res = await apiFetch("/api/summarize", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -862,16 +1045,17 @@
               selectedModel,
             }),
           });
+          if (res.status === 401) {
+            setModal("loginModal", true);
+            return;
+          }
           const result = await res.json();
-
           document.getElementById("drawerContent").innerText =
             result.summary || "(ไม่มีข้อมูล)";
 
-          // update item in memory + rerender
           if (result?.importance) {
             item.cachedImportance = result.importance;
             item.hasSummary = true;
-
             const idx = allAnnouncements.findIndex((x) => x.link === item.link);
             if (idx >= 0) {
               allAnnouncements[idx].cachedImportance = result.importance;
@@ -895,17 +1079,15 @@
         }
       }
 
-      function openOutlookFromDrawer() {
+      function openMail() {
         const text = document.getElementById("drawerContent").innerText;
         let subject = "Genesys Cloud Update";
         let body = text;
-
-        const subjectMatch = text.match(/Subject:\s*(.*)/i);
-        if (subjectMatch) {
-          subject = subjectMatch[1].trim();
+        const m = text.match(/Subject:\s*(.*)/i);
+        if (m) {
+          subject = m[1].trim();
           body = text.replace(/Subject:.*\n*/i, "").trim();
         }
-
         window.location.href = `mailto:?subject=${encodeURIComponent(
           subject
         )}&body=${encodeURIComponent(body)}`;
@@ -913,40 +1095,37 @@
 
       function downloadICS(offsetDays) {
         if (!currentItem) return;
-
         const title = (currentItem.details || "Genesys Cloud Update").slice(
           0,
           120
         );
-        const effDateStr = currentItem.effectiveDate;
-        const effDate = new Date(effDateStr);
+        const effStr = currentItem.effectiveDate;
+        const effDate = new Date(effStr);
         if (isNaN(effDate)) return toast("❌ Effective date ไม่ถูกต้อง");
-
         const eventDate = new Date(effDate);
         eventDate.setDate(effDate.getDate() - offsetDays);
 
-        const year = eventDate.getFullYear();
-        const month = String(eventDate.getMonth() + 1).padStart(2, "0");
-        const day = String(eventDate.getDate()).padStart(2, "0");
-        const dateString = `${year}${month}${day}`;
+        const y = eventDate.getFullYear();
+        const m = String(eventDate.getMonth() + 1).padStart(2, "0");
+        const d = String(eventDate.getDate()).padStart(2, "0");
+        const ds = `${y}${m}${d}`;
 
         let desc = (document.getElementById("drawerContent").innerText || "")
           .replace(/Subject:.*\n*/i, "")
           .trim();
         desc = desc.substring(0, 600) + "...";
-
         const url = currentItem.link || "";
 
-        const icsContent = `BEGIN:VCALENDAR
+        const ics = `BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//GenesysCloudHelper//EN
 BEGIN:VEVENT
 UID:${Date.now()}@genesyshelper
-DTSTAMP:${dateString}T000000Z
-DTSTART;VALUE=DATE:${dateString}
-DTEND;VALUE=DATE:${dateString}
+DTSTAMP:${ds}T000000Z
+DTSTART;VALUE=DATE:${ds}
+DTEND;VALUE=DATE:${ds}
 SUMMARY:🔔 Reminder (${offsetDays}d before): ${title}
-DESCRIPTION:Effective Date: ${effDateStr}\\n\\n${desc.replace(
+DESCRIPTION:Effective Date: ${effStr}\\n\\n${desc.replace(
           /\n/g,
           "\\n"
         )}\\n\\nLink: ${url}
@@ -954,52 +1133,43 @@ URL:${url}
 END:VEVENT
 END:VCALENDAR`;
 
-        const blob = new Blob([icsContent], { type: "text/calendar" });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = `reminder-${offsetDays}days-before.ics`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        const blob = new Blob([ics], { type: "text/calendar" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = `reminder-${offsetDays}days-before.ics`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
         toast("📅 ดาวน์โหลด .ics แล้ว");
       }
 
-      // ===========================
-      // ✅ AI Analyze (WAITING) batch
-      // ===========================
+      // ===== AI batch =====
       document
         .getElementById("aiAllBtn")
         .addEventListener("click", () => aiAnalyzeWaiting(2));
-
       async function aiAnalyzeWaiting(concurrency = 2) {
         const selectedModel = document.getElementById("modelSelect").value;
-
-        // pick targets: need AI + has link + not PDF
         const targets = filtered.filter((it) => {
           const imp = (
             it.cachedImportance ||
             guessImportance(it.details, it.type) ||
             "UNKNOWN"
           ).toUpperCase();
-          const needAI =
-            !it.hasSummary || imp === "UNKNOWN" || imp === "WAITING";
+          const need = !it.hasSummary || imp === "UNKNOWN" || imp === "WAITING";
           const okLink = it.link && !it.link.toLowerCase().endsWith(".pdf");
-          return needAI && okLink;
+          return need && okLink;
         });
-
-        if (!targets.length) return toast("ไม่มีรายการ WAITING ให้ทำแล้ว ✅");
+        if (!targets.length) return toast("ไม่มี WAITING แล้ว ✅");
 
         toast(`เริ่มวิเคราะห์ ${targets.length} รายการ...`);
-
-        let done = 0;
-        let idx = 0;
+        let done = 0,
+          idx = 0;
 
         async function worker() {
           while (idx < targets.length) {
             const item = targets[idx++];
-
             try {
-              const res = await fetch(`${API_BASE}/api/summarize`, {
+              const res = await apiFetch("/api/summarize", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -1008,23 +1178,19 @@ END:VCALENDAR`;
                   selectedModel,
                 }),
               });
-
-              const result = await res.json();
-
-              if (result?.importance) {
-                item.cachedImportance = result.importance;
+              const r = await res.json();
+              if (r?.importance) {
+                item.cachedImportance = r.importance;
                 item.hasSummary = true;
-
                 const aidx = allAnnouncements.findIndex(
                   (x) => x.link === item.link
                 );
                 if (aidx >= 0) {
-                  allAnnouncements[aidx].cachedImportance = result.importance;
+                  allAnnouncements[aidx].cachedImportance = r.importance;
                   allAnnouncements[aidx].hasSummary = true;
                 }
               }
             } catch (_) {
-              // ignore per-item error
             } finally {
               done++;
               document.getElementById(
@@ -1034,18 +1200,149 @@ END:VCALENDAR`;
             }
           }
         }
-
         await Promise.all(Array.from({ length: concurrency }, worker));
-
         document.getElementById(
           "serverStatus"
         ).textContent = `✅ Done · AI updated ${done}/${targets.length}`;
         toast("เสร็จแล้ว ✅");
       }
 
-      // ===========================
-      // Events
-      // ===========================
+      // ===== Users admin UI =====
+      function getAdminKey() {
+        return sessionStorage.getItem("ADMIN_KEY") || "";
+      }
+      function setAdminKey(k) {
+        sessionStorage.setItem("ADMIN_KEY", k);
+      }
+
+      async function loadUsers() {
+        const errEl = document.getElementById("usersErr");
+        errEl.style.display = "none";
+
+        const key =
+          document.getElementById("adminKeyInput").value.trim() ||
+          getAdminKey();
+        if (!key) {
+          document.getElementById(
+            "usersBody"
+          ).innerHTML = `<tr><td colspan="3" style="color:rgba(255,255,255,.7)">ใส่ Admin Key ก่อน</td></tr>`;
+          return;
+        }
+        setAdminKey(key);
+
+        try {
+          const res = await apiFetch("/admin/users", {
+            headers: { "X-Admin-Key": key },
+          });
+          const data = await res.json();
+          if (!res.ok) {
+            errEl.textContent = data?.error || "Load users failed";
+            errEl.style.display = "block";
+            return;
+          }
+
+          const body = document.getElementById("usersBody");
+          if (!data.length) {
+            body.innerHTML = `<tr><td colspan="3" style="color:rgba(255,255,255,.7)">ไม่มี user</td></tr>`;
+            return;
+          }
+          body.innerHTML = "";
+          data.forEach((u) => {
+            body.innerHTML += `
+          <tr>
+            <td>${escapeHtml(u.username)}</td>
+            <td>${escapeHtml(u.created_at || "-")}</td>
+            <td><button class="btn bad" onclick="deleteUser('${encodeURIComponent(
+              u.username
+            )}')">Delete</button></td>
+          </tr>
+        `;
+          });
+        } catch (e) {
+          errEl.textContent = "Error: " + e.message;
+          errEl.style.display = "block";
+        }
+      }
+
+      async function addUser() {
+        const errEl = document.getElementById("usersErr");
+        errEl.style.display = "none";
+
+        const key =
+          document.getElementById("adminKeyInput").value.trim() ||
+          getAdminKey();
+        const username = document.getElementById("newUser").value.trim();
+        const password = document.getElementById("newPass").value;
+
+        if (!key) {
+          errEl.textContent = "Missing Admin Key";
+          errEl.style.display = "block";
+          return;
+        }
+        if (!username || !password) {
+          errEl.textContent = "Missing username/password";
+          errEl.style.display = "block";
+          return;
+        }
+
+        setAdminKey(key);
+
+        const res = await apiFetch("/admin/users", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "X-Admin-Key": key },
+          body: JSON.stringify({ username, password }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          errEl.textContent = data?.error || "Add user failed";
+          errEl.style.display = "block";
+          return;
+        }
+        document.getElementById("newUser").value = "";
+        document.getElementById("newPass").value = "";
+        toast("✅ Added user");
+        await loadUsers();
+      }
+
+      async function deleteUser(usernameEnc) {
+        const errEl = document.getElementById("usersErr");
+        errEl.style.display = "none";
+
+        const uname = decodeURIComponent(usernameEnc);
+        if (!confirm(`Delete user: ${uname} ?`)) return;
+
+        const key =
+          document.getElementById("adminKeyInput").value.trim() ||
+          getAdminKey();
+        if (!key) {
+          errEl.textContent = "Missing Admin Key";
+          errEl.style.display = "block";
+          return;
+        }
+        setAdminKey(key);
+
+        const res = await apiFetch(
+          `/admin/users/${encodeURIComponent(uname)}`,
+          {
+            method: "DELETE",
+            headers: { "X-Admin-Key": key },
+          }
+        );
+        const data = await res.json();
+        if (!res.ok) {
+          errEl.textContent = data?.error || "Delete failed";
+          errEl.style.display = "block";
+          return;
+        }
+        toast("✅ Deleted user");
+        await loadUsers();
+      }
+      window.deleteUser = deleteUser;
+
+      // ===== Events =====
+      document.getElementById("loginBtn").addEventListener("click", login);
+      document.getElementById("logoutBtn").addEventListener("click", logout);
+
       document
         .getElementById("yearFilter")
         .addEventListener("change", applyFilters);
@@ -1060,7 +1357,6 @@ END:VCALENDAR`;
       document.querySelectorAll(".tab").forEach((btn) => {
         btn.addEventListener("click", () => setTab(btn.dataset.tab, true));
       });
-
       function setTab(tab, persist = true) {
         activeTab = tab;
         document
@@ -1070,7 +1366,6 @@ END:VCALENDAR`;
         applyFilters();
       }
 
-      // Sort
       document.querySelectorAll("thead th[data-sort]").forEach((th) => {
         th.addEventListener("click", () => {
           const key = th.dataset.sort;
@@ -1082,7 +1377,6 @@ END:VCALENDAR`;
       document
         .getElementById("reloadBtn")
         .addEventListener("click", fetchAnnouncements);
-
       document.getElementById("clearBtn").addEventListener("click", () => {
         document.getElementById("q").value = "";
         document.getElementById("monthFilter").value = "";
@@ -1091,7 +1385,6 @@ END:VCALENDAR`;
         applyFilters();
       });
 
-      // Drawer close
       document
         .getElementById("drawerClose")
         .addEventListener("click", () => setDrawer(false));
@@ -1099,26 +1392,51 @@ END:VCALENDAR`;
         .getElementById("drawerX")
         .addEventListener("click", () => setDrawer(false));
       document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") setDrawer(false);
+        if (e.key === "Escape") {
+          setDrawer(false);
+          setModal("usersModal", false);
+        }
       });
 
-      // Drawer actions
       document.getElementById("copyBtn").addEventListener("click", copyCurrent);
-      document
-        .getElementById("mailBtn")
-        .addEventListener("click", openOutlookFromDrawer);
+      document.getElementById("mailBtn").addEventListener("click", openMail);
       document
         .getElementById("ics7Btn")
         .addEventListener("click", () => downloadICS(7));
       document
         .getElementById("ics30Btn")
         .addEventListener("click", () => downloadICS(30));
-      document.getElementById("refreshBtn").addEventListener("click", () => {
-        if (currentItem) openDrawer(currentItem, true);
-      });
+      document
+        .getElementById("refreshBtn")
+        .addEventListener(
+          "click",
+          () => currentItem && openDrawer(currentItem, true)
+        );
 
-      // Init
-      fetchAnnouncements();
+      // Users modal
+      document
+        .getElementById("usersBtn")
+        .addEventListener("click", async () => {
+          setModal("usersModal", true);
+          document.getElementById("adminKeyInput").value = getAdminKey();
+          await loadUsers();
+        });
+      document
+        .getElementById("usersClose")
+        .addEventListener("click", () => setModal("usersModal", false));
+      document
+        .getElementById("usersX")
+        .addEventListener("click", () => setModal("usersModal", false));
+      document
+        .getElementById("reloadUsersBtn")
+        .addEventListener("click", loadUsers);
+      document.getElementById("addUserBtn").addEventListener("click", addUser);
+
+      // ===== Init =====
+      (async () => {
+        const ok = await checkLogin();
+        if (ok) await fetchAnnouncements();
+      })();
     </script>
   </body>
 </html>
